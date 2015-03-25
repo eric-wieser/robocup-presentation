@@ -1,0 +1,174 @@
+.deck-container .slide iframe:not(.video) {
+width: 100%;
+height: 100%;
+border: 0;
+margin: 0;
+padding: 0;
+background: none;
+position: absolute;
+top: 0;
+left: 0;
+}
+.deck-container .slide h2 {
+	z-index: 10;
+	position: relative;
+}
+
+/* white outline */
+.fill-photo span,
+.white-shadow,
+body .deck-container .slide.mj, body .deck-container .slide .mj {
+  text-shadow:
+    3px 0px 1px rgb(255, 255, 255),
+    -3px 0px 1px rgb(255, 255, 255),
+    0px -3px 1px rgb(255, 255, 255),
+    0px 3px 1px rgb(255, 255, 255),
+    2px 2px 1px rgb(255, 255, 255),
+    -2px 2px 1px rgb(255, 255, 255),
+    2px -2px 1px rgb(255, 255, 255),
+    -2px -2px 1px rgb(255, 255, 255),
+    3px 2px 1px rgb(255, 255, 255),
+    -3px 2px 1px rgb(255, 255, 255),
+    3px -2px 1px rgb(255, 255, 255),
+    -3px -2px 1px rgb(255, 255, 255),
+    1px 3px 1px rgb(255, 255, 255),
+    -1px 3px 1px rgb(255, 255, 255),
+    1px -3px 1px rgb(255, 255, 255),
+    -1px -3px 1px rgb(255, 255, 255),
+    -1px -1px 1px rgb(255, 255, 255),
+    -1px 1px 1px rgb(255, 255, 255),
+    1px -1px 1px rgb(255, 255, 255),
+    1px 1px 1px rgb(255, 255, 255);
+}
+
+/* manual layout adjustments */
+.csstransitions.csstransforms .deck-container .slide.temp,
+.csstransitions.csstransforms .deck-container .slide.temp-delay {
+  position: absolute !important;
+}
+
+/* hide past subitem if marked */
+.deck-container > .slide .deck-before.temp,
+.deck-container > .slide .deck-previous.temp,
+.deck-container > .slide.deck-before .temp:not(.slide),
+.deck-container > .slide.deck-previous .temp:not(.slide) {
+  opacity: 0;
+
+  -webkit-transition: -webkit-transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  -moz-transition: -moz-transform 300ms ease-in-out, opacity 300ms  ease-in-out;
+  transition: transform 300ms ease-in-out, opacity 300ms  ease-in-out;
+}
+
+/* hide past subitem one frame late if marked */
+.deck-container > .slide .deck-before.temp-delay,
+.deck-container > .slide.deck-before .temp-delay:not(.slide) {
+  opacity: 0;
+
+  -webkit-transition: -webkit-transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  -moz-transition: -moz-transform 300ms ease-in-out, opacity 300ms  ease-in-out;
+  transition: transform 300ms ease-in-out, opacity 300ms  ease-in-out;
+}
+
+html, body {
+  padding: 0;
+  height: 100%;
+  background: #eee;
+}
+
+/* math coloring */
+.mj-purple {
+  color: #B040D0;
+}
+.mj-green {
+  color: #50c020;
+}
+.mj-darkgreen {
+  color: #509000;
+}
+.mj-blue {
+  color: #3070F0;
+}
+.mj-red {
+  color: #C02050;
+}
+
+.mj-red2 {
+	color: #C5000B;
+}
+
+.mj-orange2 {
+	color: #FF950E;
+}
+
+.slide .abs-bc {
+	position: absolute;
+	bottom: 50px !important;
+	left: 50px !important;
+	right: 50px !important;
+	top: auto !important;
+	z-index: 20;
+}
+
+.fill-photo {
+	position: absolute !important;
+}
+
+.fill-photo div {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	bottom: 5px;
+	right: 5px;
+	background-size: cover;
+	background-position: 50% 50%;
+}
+.fill-photo span {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	left: 10px;
+	text-align: center;
+}
+
+.slide.deck-child-current .shared-slide {
+  opacity: 0.4;
+}
+.csstransitions.csstransforms .deck-container:not(.deck-menu) > .slide .shared-slide {
+  position: relative;
+  left: 0;
+  top: 0;
+  -webkit-transition: -webkit-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  -moz-transition: -moz-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  -ms-transition: -ms-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  -o-transition: -o-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  transition: -webkit-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+}
+
+.grid21-00 {
+  position: absolute;
+  top: 0 !important;
+  left: 0 !important;
+  width: 50%;
+  height: 100%;
+}
+.grid21-10 {
+  position: absolute;
+  top: 0 !important;
+  left: 50% !important;
+  width: 50%;
+  height: 100%;
+}
+.grid12-00 {
+  position: absolute;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100%;
+  height: 50%;
+}
+.grid12-01 {
+  position: absolute;
+  top: 50% !important;
+  left: 0 !important;
+  width: 100%;
+  height: 50%;
+}

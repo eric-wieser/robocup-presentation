@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MathBox Graph</title>
+
+  <!--
+    This example shows labelling of axes.
+  -->
+
+  <script type="text/javascript" charset="utf-8" src="mathbox/domready.js"></script>
+  <script type="text/javascript" charset="utf-8" src="mathbox/mathbox.js"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    DomReady.ready(function () {
+      if (location.href.match(/^file:/)) {
+        document.getElementById('info').style.opacity = 1;
+        document.getElementById('info').innerHTML = "Sorry. This example does not work when accessed using file://. Please use an http:// host and try again.";
+      }
+    });
+  </script>
+
+  <script type="text/javascript" charset="utf-8">
+
+  var brown = 0x924000,
+      orangered = 0xc03000,
+      red = 0xc02050,
+      green = 0x50c020,
+      inside = 0xf9ffe8,
+      darkgreen = 0x509000,
+      darkergreen = 0x284800,
+      blue = 0x3080ff,
+      lightblue = 0x8bb8ff,
+      darkblue = 0x17408f,
+      surfacered = 0xdf5000,
+      purple = 0xd040b0,
+      darkpurple = 0x95227c,
+      royal = 0x5528A0,
+      gold = 0xefc040,
+      slate = 0x5070A0,
+      darkslate = 0x45628d,
+      cyan = 0x30A0B0,
+      darkcyan = 0x24876f,
+      lightgray = 0xe0e0e0;
+      gray = 0xc0c0c0;
+      darkgray = 0xa0a0a0,
+      orange = 0xFF9703,
+      darkorange = 0xc46a02,
+      white = 0xffffff,
+      black = 0x404040;
+
+  var irSensor = {
+    color: black,
+    shaded: false,
+    domain: [[-0.25, 0.25], [-1, 1]],
+    n: [2, 32],
+    live: false,
+    expression: function(x, y) {
+      var r = 0.25;
+      if(y < -r || y > r || x < 0)
+        return [x, y, 0];
+      else {
+        var p = x * 4;
+        var theta = y / r * Math.PI / 2;
+        return [x + p * r * Math.cos(theta), r * Math.sin(theta), 0];
+      }
+    }
+  };
+
+  var cone = {
+    color: red,
+    shaded: false,
+    opacity: 0.25,
+    domain: [[0, 2], [0, τ]],
+    n: [33, 32],
+    lines: true,
+
+    expression: function(d, theta) {
+      var p = 0.5;
+      return [d, p*d*Math.cos(theta), p*d*Math.sin(theta)]
+    }
+  };
+
+  var irAngles = _.range(0, τ, τ / 16);
+
+  var ballAngle = τ/3;
+  var ballDist = 10;
+
+  var getReading = function(angle) {
+    var r = 1;
+    var dist = Math.sqrt(ballDist*ballDist + r*r - 2*ballDist*r*Math.cos(angle - ballAngle))
+    var cosAlpha = (ballDist * Math.cos(ballAngle - angle) - r) / dist;
+
+    // var r = 1;
+    // var perpDist = ballDist * Math.cos(ballAngle - angle) - r;
+    // if(perpDist < 0) return 0;
+    // else return perpDist;
+
+    return Math.max(0, cosAlpha / dist * 5);
+  }
+
+  var wave = function(x) { var s = Math.sin(x*τ); return s*s; };
+  var randomScale = function(t) {
+
+    return (
+      + 0.95*wave(t*0.02)
+      + 0.05
+    ) ;
+  }
+
+  var peakHeight = function(peak) {
+    if(peak < 8) return 1;
+    else if(peak < 12) return 1 / 2;
+    else if(peak < 16) return 1 / 4;
+    else if(peak < 24) return 1 / 8;
+    else return 0;
+  }
+
+  var fullChart = function(t) {
+    var smallPeriods = t * 32;
+    var peak = smallPeriods % 32;
+    var phase = smallPeriods % 1;
+    var c = 0.5 - 0.5*Math.cos(phase * 2 * Math.PI);
+
+    return c * peakHeight(peak);
+  }
+  var changingFullChart = function(t) {
+    t = 2*director.clock(5)+t;
+    return fullChart(t) * 10*randomScale(t);
+  }
+  var badChart = function(t) {
+    t = 2*director.clock(5)+t;
+    var smallPeriods = t * 32;
+    var peak = smallPeriods % 32;
+    var phase = smallPeriods % 1;
+
+    return 10*randomScale(t) * peakHeight(peak);
+  }
+
+  /**
+   * Bootstrap
+   */
+  DomReady.ready(function() {
+    ThreeBox.preload([
+      'mathbox/snippets.glsl.html'
+    ], function (assets){
+
+
+      // MathBox boilerplate
+      var mathbox = window.mathbox = mathBox({
+        cameraControls: false,
+        cursor:         true,
+        controlClass:   ThreeBox.OrbitControls,
+        elementResize:  true,
+        fullscreen:     true,
+        screenshot:     true,
+        stats:          false,
+        scale:          1,
+      });
+
+      mathbox.world().loop().hookPreRender(function() {
+        // window.thetas = getThetas();
+      });
+      mathbox.start();
+
+      // Set up director
+      var script = [
+        // Nothing
+        [
+          ['add', 'axis', {
+            axis: 0,
+            color: darkgray,
+            lineWidth: 2,
+            tickUnit: 8,
+            tickScale: 2
+          }],
+          ['add', 'axis', {
+            axis: 1,
+            color: darkgray,
+            lineWidth: 2,
+            tickUnit: 8,
+            tickScale: 2
+          }],
+          ['set', 'viewport', {
+            range: [[0, 1], [0, 2]],
+            scale: [1, 0.75]
+          }]
+        ],
+        [
+          ['add', 'curve', {
+            id: 'wave',
+            color: blue,
+            n: 2049,
+            domain: [0, 1],
+            expression: fullChart
+          }],
+        ],
+        [
+          ['animate', 'viewport', {
+            range: [[0, 4], [0, 10]],
+            scale: [1.2, 0.5]
+          }],
+          ['animate', '#wave', {
+            domain: [0, 4]
+          }]
+        ],
+        [
+          ['animate', '#wave', {
+            expression: changingFullChart
+          }]
+        ],
+        [
+          ['animate', '#wave', {
+            expression: badChart
+          }]
+        ],
+        [
+          ['animate', 'viewport', {
+            range: [[0, 32], [0, 10]]
+          }],
+          ['animate', '#wave', {
+            domain: [0, 32]
+          }]
+        ],
+        [
+          ['add', 'curve', {
+            id: 'threshold',
+            color: red,
+            n: 2,
+            domain: [0, 32],
+            expression: function(t) {
+              return 1
+            }
+          }],
+        ],
+        [
+          ['add', 'surface', {
+            id: 'threshold2',
+            shaded: false,
+            color: red,
+            opacity: 0.5,
+            n: [2049, 2],
+            domain: [[0, 32], [0, 1]],
+            expression: function(t, top) {
+              var x = badChart(t);
+              return [t, x > 1 ? x * top : 1];
+            }
+          }]
+        ], [
+          ['animate', '#threshold2', {
+            expression: function(t, top) {
+              var x = badChart(t);
+              return [t, x > 1 ? 5 * top : 1];
+            }
+          }],
+          ['remove', '#wave'],
+          ['remove', '#threshold']
+        ],
+        [
+          ['add', 'curve', {
+            id: 'average',
+            color: blue,
+            n: 2049,
+            domain: [0, 32],
+            expression: function(t) {
+              t = 2*director.clock(5)+t;
+              return 5*randomScale(t);
+            }
+          }],
+        ],
+      ];
+      var director = window.director = new MathBox.Director(mathbox, script);
+
+      if(window.top != window) {
+        window.addEventListener("message", function(e) {
+          var d = e.data;
+          if(d.type == 'step') {
+            director.go(d.step);
+          }
+        }, false);
+      }
+      else {
+        // Arrow controls
+        // Controls for stand-alone
+        window.addEventListener('keydown', function (e) {
+          if (e.keyCode == 38 || e.keyCode == 37) director.back();
+          else if (e.keyCode == 40 || e.keyCode == 39) director.forward();
+          else {
+            return;
+          }
+
+          document.getElementById('info').style.opacity = '0';
+        });
+      }
+
+      // Viewport camera/setup
+      mathbox
+        // Cartesian viewport
+        .viewport({
+          type: 'cartesian',
+          range: [[0, 4], [0, 1], [0, 1]],
+          scale: [1, 0.25, .25]
+        })
+        .transition(600)
+
+    });
+  });
+  </script>
+
+  <style type="text/css" media="screen">
+    html, body { height: 100%; }
+    body { margin: 0; padding: 0 }
+    canvas { display: block }
+
+    #info {
+      position: absolute;
+      left: 50%;
+      bottom: 50px;
+      z-index: 20;
+
+      width: 300px;
+      margin-left: -150px;
+
+      padding: 25px;
+      background: rgba(0, 0, 0, .5);
+      color: #fff;
+
+      font-family: "Lucida Grande", sans-serif;
+      font-size: 16px;
+      text-align: center;
+
+      border-radius: 3px;
+      text-shadow: 0px 1px 0px rgba(0, 0, 0, .4);
+
+      opacity: 0;
+    }
+
+    #info kbd {
+      background: #aaa;
+
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, .3);
+      border-radius: 3px;
+      padding: 3px;
+      margin: 3px;
+
+      font-family: inherit;
+    }
+  </style>
+
+</head>
+<body>
+  <div id="info"></div>
+</body>
+</html>
