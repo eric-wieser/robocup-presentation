@@ -14,6 +14,7 @@
 	<!-- <link rel="stylesheet" href="deck.js/extensions/goto/deck.goto.css"> -->
 	<link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css">
 	<link rel="stylesheet" href="deck.js/extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="deck.js/extensions/notes/deck.notes.css">
 	<link rel="stylesheet" href="deck.js/extensions/status/deck.status.css">
 	<link rel="stylesheet" href="deck.js/extensions/hash/deck.hash.css"><!-- 
 	<link rel="stylesheet" href="deck.js/extensions/scale/deck.scale.css"> -->
@@ -39,6 +40,10 @@
 			<h1>Robocup Junior Soccer</h1>
 			<p>Eric Wieser</p>
 		</div>
+		<div class="notes">
+			Right, so I’ll be talking about a robotics competition called robocup junior soccer
+So firstly, what is Robocup?
+		</div>
 	</section>
 	<section class="slide" id="not">
 		<div class="fill-photo grid21-00 shared-slide">
@@ -49,10 +54,17 @@
 			<div style="background-image:url(images/robomug.jpg)"></div>
 			<span class="white-shadow"><cite>http://mediacup.teco.edu</cite></span>
 		</div>
+		<div class="notes">
+			I’ve had a lot of people think I meant this
+			Or even this
+		</div>
 	</section>
 	<section class="slide" id="logo">
 		<div class="vcenter">
 			<img src="images/robocup-logo.jpg" />
+		</div>
+		<div class="notes">
+			Robocup is neither of these things – it’s an international competition to build fully-autonomous football-playing robots
 		</div>
 	</section>
 	<section class="slide" id="objective">
@@ -61,6 +73,9 @@
 			<p>By [the] mid-21st century, a team of fully autonomous humanoid robot soccer players shall win [a] soccer game, complying with the official rule of the FIFA, against the winner of the most recent World Cup.</p>
 			<p><cite>http://www.robocup.org/about-robocup/objective/</cite></p>
 		</blockquote>
+		<div class="notes">
+			with the goal of producing a team of robots so good that they can beat the best humans. If that’s not ambitious enough, they plan to get there in around 35 years
+		</div>
 	</section>
 	<section class="slide" id="leagues.humanoid">
 		<section class="shared-slide" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0">
@@ -94,6 +109,13 @@
 				<span class="white-shadow">Junior</span>
 			</div>
 		</section>
+		<div class="notes">
+			The competition is split into a bunch of divisions
+
+			First, there’s the humanoid divisions. These are by far the hardest to work on – not only do they need to walk, but sidestep, kick, recover from a fall, and even dive to save goals. Adult size is particularly tricky – the taller they are, the harder they fall, The games are pretty slow-paced in these divisions, but they get faster year on year
+
+			The vehicular category is also subdivided – these robots move very quickly. The spots you can see on the top are for overhead cameras – remember, they’ve got to work out what to do without human intervention. The middle size league uses standard-size footballs, and supposedly. There’s  one more league I haven’t mentioned
+		</div>
 	</section>
 
 	<section class="slide" id="entry.lego">
@@ -113,6 +135,11 @@
 			<div style="background-image:url(images/entry-metal.jpg)"></div>
 			<span class="white-shadow">2011 - Metal</span>
 		</div>
+		<div class="2011">
+			Junior. This is the simplest of the divisions, designed to get under 19-year-olds into the scheme. With the help of a friend, I entered this competition in 2010, using lego robotics parts very similar to those we used here.
+
+			And we did it again in 2011
+		</div>
 	</section>
 	<section class="slide">
 		<h2>Gameplay</h2>
@@ -123,6 +150,11 @@
 		<div class="slide" style="float: left; width: 50%">
 			<img src="images/ir-ball.png" style="height: 300px" />
 			<p>IR-emitting ball</p>
+		</div>
+		<div class="notes">
+			But first, on to how the game works.
+			It’s played on an arena around the third of the size of this desk, with raised walls to keep the ball and robot on the pitch, and brightly colored goals.
+			The ball is special too – it emits a specific infrared signal designed to be easy to detect
 		</div>
 	</section>
 	<section class="slide">
@@ -146,6 +178,16 @@
 		<div class="slide"></div>
 		<div class="slide"></div>
 		<div class="slide"></div>
+
+		<div class="notes">
+			So, the ball used gives off infrared light
+
+			It's a modulated 40kHz carrier wave, like you'd get in a TV remove. That's both good and bad - hard to confuse with natural light, but TV remotes use FM modulation, so most recievers throw away amplitude information. Unfortunately, that's the bit of information that tells us how far away the ball is.
+
+			To solve this problem, the wave given off looks like this [next slide], which is repeated at around 1kHz. The ball's going to move, so the signal recieved at the robot changes in amplitude, over time.
+
+			The detectors can't pick up any signal above this red line, so they see this
+		</div>
 	</section>
 
 	<section class="slide" id="ir-processing">
@@ -182,6 +224,11 @@
 		<span class="deck-status-total"></span>
 	</p>
 
+	<div class="deck-notes">
+		<div class="deck-notes-header">Notes</div>
+		<div class="deck-notes-container"></div>
+	</div>
+
 
 	<!-- deck.hash snippet -->
 	<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
@@ -201,6 +248,7 @@
 <!-- <script src="deck.js/extensions/goto/deck.goto.js"></script> -->
 <script src="deck.js/extensions/status/deck.status.js"></script>
 <script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/notes/deck.notes.js"></script>
 <!-- <script src="deck.js/extensions/scale/deck.scale.js"></script> -->
 
 <!-- Initialize the deck. You can put this in an external file if desired. -->
